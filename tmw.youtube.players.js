@@ -174,15 +174,15 @@ if(document.body.onload) {
     document.body.onload = YTMWOnLoadBody;
 }
 
-if(onYouTubeIframeAPIReady) {
-    var oldYTReady = onYouTubeIframeAPIReady;
-    onYouTubeIframeAPIReady = function(){
+if(window.onYouTubeIframeAPIReady) {
+    var oldYTReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function(){
         //console.log('onYouTubeIframeAPIReady');
         window.ytAPILoaded = true;
         oldYTReady(arguments);
     }
 } else {
-    var onYouTubeIframeAPIReady = function(a,b){
+    window.onYouTubeIframeAPIReady = function(){
         //console.log('onYouTubeIframeAPIReady');
         window.ytAPILoaded = true;
     }
