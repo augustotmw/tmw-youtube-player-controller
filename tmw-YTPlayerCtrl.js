@@ -16,7 +16,14 @@ var YTMWPlayerCtrl = function (opts) {
         };
     }
 
-    var $iframes = document.querySelectorAll ? document.querySelectorAll('iframe') : document.getElementsByTagName('IFRAME');
+    var aux_iframes = document.querySelectorAll ? document.querySelectorAll('iframe') : document.getElementsByTagName('IFRAME');
+    var $iframes = new Array();
+
+    for(var i=0; i<aux_iframes.length; i++) {
+        if(aux_iframes[i].src.indexOf('youtube') != -1) {
+            $iframes.push(aux_iframes[i]);
+        }
+    }
 
     var evStateChange = function(s){
         //console.log(s);
@@ -31,11 +38,11 @@ var YTMWPlayerCtrl = function (opts) {
         if(ytAPILoaded) {
             //console.log('ytapi loaded');
             if($iframes.length) {
-                for(var i=0; i< $iframes.length; i++) {
-                    this.id = "ytPlayerVideo"+i;
+                for(var i=0; i < $iframes.length; i++) {
+                    $iframes[i].id = $iframes[i].id != "" ? $iframes[i].id : "ytPlayerVideo"+i;
                     list.push({
-                        "id": "ytPlayerVideo"+i, 
-                        "inst": new YT.Player(this.id+"", {
+                        "id": $iframes[i].id, 
+                        "inst": new YT.Player($iframes[i].id+"", {
                             events : {
                                 "onStateChange" : evStateChange
                             }
@@ -56,8 +63,7 @@ var YTMWPlayerCtrl = function (opts) {
         } else {
             context.error = 404;
             context.errorStatus = 'No youtube video found on page.';
-            console.warn ? console.warn("TMW's Youtube Player Controller warns: No youtube video found on page.") : false;
-            context.error = 'Too many tries to load Youtube API.';
+            console.warn ? console.warn("TMW's Youtube Player Controller warns: Limit to try load Youtube API reached. ("+opts.secsToWaitYoutubeLoadAPI+" times)") : false;
         }
     }
     
@@ -82,6 +88,7 @@ var YTMWPlayerCtrl = function (opts) {
             }
         } else if(id == 'playing'){
             nowPlaying ? context.pause(nowPlaying) : false;
+            nowPlaying = false;
         } else {
             for(var i = 0; i < list.length; i++) {
                 if(id == list[i].id) {
@@ -104,24 +111,32 @@ var YTMWPlayerCtrl = function (opts) {
 
 window.ytAPILoaded = false;
 
+var YTMWOnLoadBody = function() {
+    window.ytplayer = new YTMWPlayerCtrl();
+}
+
+if(document.body.onload) {
+    var _oldOnLoadBody = document.body.onload;
+    document.body.onload = function (e) {
+        //console.log('document.body.onload')
+        YTMWOnLoadBody();
+        _oldOnLoadBody(e);
+    }
+} else {
+    document.body.onload = YTMWOnLoadBody;
+}
+
 if(onYouTubeIframeAPIReady) {
-    var oldReady = onYouTubeIframeAPIReady;
+    var oldYTReady = onYouTubeIframeAPIReady;
     onYouTubeIframeAPIReady = function(){
         //console.log('onYouTubeIframeAPIReady');
         window.ytAPILoaded = true;
-
-        window.tmwYTPlayer = new YTMWPlayerCtrl();
-
-        oldReady(arguments);
+        oldYTReady(arguments);
     }
-
 } else {
     var onYouTubeIframeAPIReady = function(a,b){
         //console.log('onYouTubeIframeAPIReady');
         window.ytAPILoaded = true;
-
-        window.tmwYTPlayer = new YTMWPlayerCtrl();
-
     }
 }
 
