@@ -1,5 +1,53 @@
 
 
+/**
+ * tmw.youtube.players.js
+ * @version: v1.0.0
+ * @author: Augusto TMW
+ *
+ * Created by Augusto TMW on 2016-10-20. Please report any bug at augustotmw@gmail.com
+ *
+ * Copyright (c) 2016 Augusto TMW augustotmw@gmail.com
+ *
+ * The MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * 
+ * Objective:
+ * 
+ * This algoritm has as objective get/generate the instances from youtube's players on page and easy work with them.
+ * 
+ * 
+ * To-do next:
+ *  - Play routines
+ *  - Stop routines
+ * 
+**/
+
+
+'use strict';
+
+
 var YTMWPlayerCtrl = function (opts) {
     var context = this;
     var list = new Array();
@@ -112,7 +160,7 @@ var YTMWPlayerCtrl = function (opts) {
 window.ytAPILoaded = false;
 
 var YTMWOnLoadBody = function() {
-    window.ytplayer = new YTMWPlayerCtrl();
+    window.ytplayers = new YTMWPlayerCtrl();
 }
 
 if(document.body.onload) {
